@@ -3,7 +3,9 @@ const bodyParser = require("body-parser");
 const request = require("request");
 const https =require("https");
 const app = express();
-
+require("dotenv").config();
+const MAPI_KEY = process.env.API_KEY
+const MAPI_SERVER = process.env.API_SERVER
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended:true}));
 
@@ -29,10 +31,10 @@ app.post("/",function(req,res){
         ]
     };
     const jsonData= JSON.stringify(data);
-    const url = "https://us11.api.mailchimp.com/3.0/lists/5b61dede07";
+    const url = "https://us11.api.mailchimp.com/3.0/lists/"+MAPI_SERVER;
     const option={
         method: "POST",
-        auth:"kais:6601fb64bbde40e13522d808b0be86b1-us11"
+        auth:"kais:"+MAPI_KEY
     }
     const request =https.request(url,option,function(response){
         if(response.statusCode===200){
@@ -47,10 +49,6 @@ app.post("/",function(req,res){
     // request.write(jsonData);
     request.end();
 });
-//api key
-//6601fb64bbde40e13522d808b0be86b1-us11
-
-//id : 5b61dede07
 app.post("/failure",function (req,res) {
     res.redirect("/");
   })
